@@ -1,7 +1,7 @@
 wintersmith-csv
 ===============
 
-A [Wintersmith}(https://github.com/jnordberg/wintersmith) plugin for processing CSV files.
+A [Wintersmith](https://github.com/jnordberg/wintersmith) plugin for processing CSV files.
 
 CSV files will be served as normal, but the data they contain will be available in the content tree. It's added as `data` on the file's object.
 
