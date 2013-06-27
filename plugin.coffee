@@ -2,7 +2,7 @@ fs = require 'fs'
 path = require 'path'
 csv = require 'csv'
 
-module.exports = (wintersmith, callback) ->
+module.exports = (env, callback) ->
 
   class CsvPlugin extends wintersmith.ContentPlugin
 
@@ -10,14 +10,15 @@ module.exports = (wintersmith, callback) ->
 
 
     getFilename: ->
-      @_filename
+      @_filename.relative
 
-    render: (locals, contents, templates, callback) ->
-      # return the plain CSV file
-      callback null, new Buffer @_text
+    getView: ->
+      (locals, contents, templates, callback) ->
+        # return the plain CSV file
+        callback null, new Buffer @_text
 
-  CsvPlugin.fromFile = (filename, base, callback) ->
-    fs.readFile path.join(base, filename), (error, buffer) ->
+  CsvPlugin.fromFile = (filepath, callback) ->
+    fs.readFile filepath, (error, buffer) ->
       if error
         callback error
       else
@@ -25,7 +26,7 @@ module.exports = (wintersmith, callback) ->
         csv()
           .from(buffer.toString(), columns: true)
           .on('record', (row, index) -> data.push row)
-          .on('end', (count) -> callback null, new CsvPlugin filename, buffer.toString(), data)
+          .on('end', (count) -> callback null, new CsvPlugin(filepath, buffer.toString(), data))
 
-  wintersmith.registerContentPlugin 'csv', '**/*.csv', CsvPlugin
+  env.registerContentPlugin 'csv', '**/*.csv', CsvPlugin
   callback() # tell the plugin manager we are done
