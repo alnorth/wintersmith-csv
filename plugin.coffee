@@ -6,19 +6,19 @@ module.exports = (env, callback) ->
 
   class CsvPlugin extends env.ContentPlugin
 
-    constructor: (@_filename, @_text, @data) ->
+    constructor: (@_filepath, @_text, @data) ->
 
 
     getFilename: ->
-      @_filename.relative
+      @_filepath.relative
 
     getView: ->
-      (locals, contents, templates, callback) ->
+      (env, locals, contents, templates, callback) ->
         # return the plain CSV file
         callback null, new Buffer @_text
 
   CsvPlugin.fromFile = (filepath, callback) ->
-    fs.readFile filepath, (error, buffer) ->
+    fs.readFile filepath.full, (error, buffer) ->
       if error
         callback error
       else
