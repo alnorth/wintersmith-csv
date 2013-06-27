@@ -4,7 +4,7 @@ csv = require 'csv'
 
 module.exports = (env, callback) ->
 
-  class CsvPlugin extends wintersmith.ContentPlugin
+  class CsvPlugin extends env.ContentPlugin
 
     constructor: (@_filename, @_text, @data) ->
 
